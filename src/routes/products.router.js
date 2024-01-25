@@ -4,6 +4,22 @@ const express = require("express")
 
 const router = express.Router()
 
+let socket
+
+const setupIO = async (received) => {
+
+    socket = received
+  
+  
+      // You can emit the current state of your JSON file when a user connects
+      const products = await pm.getProducts()
+      socket.emit('update', products);
+  
+      socket.on('disconnect', () => {
+        console.log('User disconnected from the products route');
+      });
+  };
+
 router.get("/", async (req, res) => {
     try {
         const params = req.query.limit
@@ -45,9 +61,11 @@ router.post("/", async (req,res) => {
     const obj = req.body
 
     try{
-        pm.addProduct(obj)
+        await pm.addProduct(obj)
+        socket.emit("update",await pm.getProducts())
     }
     catch(err) {
+        console.log(err)
         res.status(400).json({error:err.message})
     }
 })
@@ -59,6 +77,7 @@ router.put("/:id", async (req,res) => {
 
     try{
         await pm.updateProduct(id,obj)
+        socket.emit("update",await pm.getProducts())
     }
     catch(err) {
         res.status(400).json({error:err.message})
@@ -71,6 +90,7 @@ router.delete("/:id", async (req,res) => {
 
     try{
         await pm.deleteProduct(id)
+        socket.emit("update",await pm.getProducts())
     }
     catch(err) {
         res.status(400).json({error:err.message})
@@ -78,4 +98,4 @@ router.delete("/:id", async (req,res) => {
 
 })
 
-module.exports = router
+module.exports = {router,setupIO}

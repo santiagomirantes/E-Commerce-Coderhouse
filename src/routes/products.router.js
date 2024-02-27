@@ -1,5 +1,5 @@
-const { ProductManager } = require("../classes/ProductManager");
-const pm = new ProductManager()
+const { ProductsManager } = require("../dao/db/ProductsManager");
+const pm = new ProductsManager()
 const express = require("express")
 
 const router = express.Router()
@@ -11,7 +11,6 @@ const setupIO = async (received) => {
     socket = received
   
   
-      // You can emit the current state of your JSON file when a user connects
       const products = await pm.getProducts()
       socket.emit('update', products);
   
@@ -20,8 +19,13 @@ const setupIO = async (received) => {
       });
   };
 
+
+
+
+
 router.get("/", async (req, res) => {
     try {
+
         const params = req.query.limit
         const products = await pm.getProducts()
         

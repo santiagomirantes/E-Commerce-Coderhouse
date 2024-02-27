@@ -5,15 +5,17 @@ const path = require("path")
 const {create} = require("express-handlebars")
 const http = require('http');
 const {Server} = require('socket.io');
-const {ProductManager} = require("./classes/ProductManager")
+const {ProductsManager} = require("./dao/db/ProductsManager")
+const {connect} = require("./dao/db/connect")
 
 /*creating the server and working with the imported packages*/
 
-const pm = new ProductManager()
+const pm = new ProductsManager()
 const app = express()
 const port = 8080 || process.env.PORT
 const server = http.createServer(app)
 const io = new Server(server)
+
 
 /*handlebars*/
 
@@ -53,6 +55,16 @@ io.on('connection', (socket) => {
 
 app.use(express.static("public"))
 app.use(express.json())
+// Middleware to connect to the database before accessing the router
+app.use(async (req, res, next) => {
+    try {
+        await connect()
+        next()
+    } catch (error) {
+        console.error('Failed to connect to database:', error);
+        res.status(500).send('Failed to connect to database');
+    }
+});
 
 /*Routers*/
 
@@ -60,6 +72,7 @@ const productsRouter = require("./routes/products.router")
 const cartsRouter = require("./routes/carts.router")
 
 app.get("/", async (req, res) => {
+    
     try{
         const products = await pm.getProducts()
         res.render("home",{
@@ -67,7 +80,7 @@ app.get("/", async (req, res) => {
         })
     }
     catch{err => {
-        res.send(err)
+        res.status(500).json({error:err})
     }}
     
 })

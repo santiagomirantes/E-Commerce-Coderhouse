@@ -76,7 +76,7 @@ app.get("/", async (req, res) => {
     try{
         const products = await pm.getProducts()
         res.render("home",{
-            products
+            products:products.payload
         })
     }
     catch{err => {

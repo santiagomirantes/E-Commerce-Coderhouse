@@ -1,28 +1,14 @@
-class cartsManager {
+class CartsManager {
 
     constructor() {
         this.cartModel = require("./models/cart.model")
     }
 
-    checkIfEmpty(obj) {
-         let toCheck = ["title", "description", "price", "code", "stock", "status", "category"]
-         let isEmpty = false
-         toCheck.forEach(category => {
-             let val = obj[category]
-             if (val === undefined || val === null) {
-                 isEmpty = true
-             }
-         })
-         return isEmpty
-     }
+    async createCart(obj) {
 
-    async addCart(obj) {
 
-       let isEmpty = this.checkIfEmpty(obj)
-
-       if(isEmpty) {
-         console.error("There are arguments missing to create a new cart.")
-         throw new Error("There are arguments missing to create a new cart.")
+       if(!Array.isArray(obj.products)) {
+         obj.products = []
        }
 
        try{
@@ -44,7 +30,7 @@ class cartsManager {
 
     }
 
-    async getcart() {
+    async getCart() {
 
          try{
 
@@ -59,7 +45,7 @@ class cartsManager {
 
     }
 
-   async getcartById(id) {
+   async getCartById(id) {
 
     try{
 
@@ -74,7 +60,7 @@ class cartsManager {
 
    }
 
-   async updatecart(id,newObj) {
+   async updateCart(id,newObj) {
 
      try{
 
@@ -102,7 +88,7 @@ class cartsManager {
    }
 
 
-   async deletecart(id) {
+   async deleteCart(id) {
 
        try{
 
@@ -125,4 +111,4 @@ class cartsManager {
 
 }
 
-module.exports = { cartsManager }
+module.exports = { CartsManager }

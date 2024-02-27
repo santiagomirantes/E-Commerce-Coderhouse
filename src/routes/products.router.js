@@ -26,18 +26,15 @@ const setupIO = async (received) => {
 router.get("/", async (req, res) => {
     try {
 
-        const params = req.query.limit
-        const products = await pm.getProducts()
+        const query = req.query.query === undefined ? {} : JSON.parse(req.query.query)
+        const page = req.query.page === undefined ? 1 : parseInt(req.query.page)
+        const limit = req.query.limit === undefined ? 10 : parseInt(req.query.limit)
+        const sort = req.query.sort
         
-        let limit
-        if (params < 0 || params === undefined || isNaN(parseInt(params))) {
-            limit = products.length
-        }
-        else {
-            limit = parseInt(params)
-        }
+        const products = await pm.getProducts(query,page, limit, sort)
+        
         const obj = {
-            products: products.slice(0, limit)
+            products: products
         }
 
         res.send(JSON.stringify(obj))

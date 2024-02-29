@@ -73,15 +73,7 @@ const cartsRouter = require("./routes/carts.router")
 
 app.get("/", async (req, res) => {
     
-    try{
-        const products = await pm.getProducts()
-        res.render("home",{
-            products:products.payload
-        })
-    }
-    catch{err => {
-        res.status(500).json({error:err})
-    }}
+    res.render("home",{})
     
 })
 
@@ -92,6 +84,21 @@ app.get("/realtimeproducts", async (req,res) => {
     catch(err) {
         res.send(err)
     }
+})
+
+app.get("/products", async (req,res) => {
+    
+    try{
+        const products = await pm.getProducts({},0,5,null)
+        const cartID = "65de29cc1887c456fbbca05c"
+        res.render("products",{
+            products:products.payload,
+            cart:cartID
+        })
+    }
+    catch{err => {
+        res.status(500).json({error:err})
+    }}
 })
 
 app.use("/api/products", productsRouter.router)

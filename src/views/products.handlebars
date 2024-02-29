@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="styles/home.css">
+  <script src="/socket.io/socket.io.js"></script>
+
+<body>
+
+  <h1>Products</h1>
+
+  <h2>Current cart: {{cart}}</h2>
+
+  <div id="products">
+
+    {{#each products}}
+    <div class="product">
+      <p class="header">{{this.code}}</p>
+      <h2>{{this.title}}</h2>
+      <h3>{{this.price}}</h3>
+      <p>{{this.description}}</p>
+
+      <button onclick="addToTheCart('{{../cart}}','{{this.id}}')">Añadir al carrito</button>
+    </div>
+    {{/each}}
+    
+  </div>
+
+  <script src="/scripts/products.js"></script>
+</body>
+
+</html>

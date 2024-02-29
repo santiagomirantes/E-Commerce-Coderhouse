@@ -48,26 +48,27 @@ class ProductsManager {
 
         try {
 
+
+
             if (sort === "asc") {
-                sort = { price: 1 };
+                sort = { _id:1,price: 1 };
             }
             else if (sort === "desc") {
-                sort = { price: -1 }
+                sort = { _id:1,price: -1 }
             }
             else {
                 sort = {}
             }
 
 
-            const products = await this.productModel.find(query)
-                .skip((page - 1) * limit)
-                .limit(limit)
-                .sort(sort)
-                .lean()
+            const search = await this.productModel.paginate(query,{lean:true,limit,page,sort:{
+                _id:1,
+                price:-1
+            }})
 
-            const allProducts = await this.productModel.countDocuments({})
 
-            const totalPages = Math.ceil(allProducts / limit);
+
+            const totalPages = search.totalPages
             const hasPrevPage = page > 1;
             const hasNextPage = page < totalPages;
             const prevPage = hasPrevPage ? page - 1 : null;
@@ -76,10 +77,11 @@ class ProductsManager {
             const nextLink = hasNextPage ? `/api/products?page=${nextPage}&limit=${limit}` : null;
 
 
+
             return {
                 status:"success",
-                payload:products,
-                totalPages,
+                payload:search.docs,
+                totalPages:search.totalDocs,
                 hasPrevPage,
                 hasNextPage,
                 prevPage,

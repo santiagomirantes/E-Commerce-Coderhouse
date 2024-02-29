@@ -3,15 +3,13 @@ const socket = io()
 socket.on("connection", async () => {
 
 
-const query = JSON.stringify({
-    
-})
-
 const data = {
-    
+    quantity:5
 }
 
-const res = await fetch("/api/products?query=" + query + "&limit=1&sort=desc",{
+const prodId = "65ca6cfb8ffb2790bd8dd16a"
+
+const res = await fetch("/api/carts/65de29cc1887c456fbbca05c",{
     method:"GET",
     /*body:JSON.stringify(data),
     headers:{

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const mongoosePaginate = require("mongoose-paginate-v2")
 
 
 const productCollection = "products"
@@ -15,6 +16,8 @@ const productSchema = new mongoose.Schema({
 })
 
 let productModel
+
+productSchema.plugin(mongoosePaginate)
 
 if (mongoose.modelNames().includes(productCollection)) {
     productModel = mongoose.model(productCollection)

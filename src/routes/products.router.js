@@ -27,17 +27,15 @@ router.get("/", async (req, res) => {
     try {
 
         const query = req.query.query === undefined ? {} : JSON.parse(req.query.query)
-        const page = req.query.page === undefined ? 1 : parseInt(req.query.page)
+        const page = req.query.page === undefined ? 0 : parseInt(req.query.page)
         const limit = req.query.limit === undefined ? 10 : parseInt(req.query.limit)
         const sort = req.query.sort
+
         
         const products = await pm.getProducts(query,page, limit, sort)
         
-        const obj = {
-            products: products
-        }
 
-        res.send(JSON.stringify(obj))
+        res.send(JSON.stringify(products))
 
     }
     catch(err) {

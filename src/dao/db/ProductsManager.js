@@ -30,7 +30,7 @@ class ProductsManager {
 
             const product = new this.productModel(obj)
 
-            await product.save()
+            return await product.save()
 
 
         }
@@ -101,7 +101,7 @@ class ProductsManager {
 
         try {
 
-            const products = await this.productModel.findOne({ _id: id })
+            const products = await this.productModel.findOne({ _id: id }).lean()
 
             return products
         }
@@ -150,6 +150,8 @@ class ProductsManager {
             if (!deletedProduct) {
                 throw new Error("Product not found")
             }
+
+            return
 
         }
         catch (err) {

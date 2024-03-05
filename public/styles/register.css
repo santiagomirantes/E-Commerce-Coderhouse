@@ -1,0 +1,19 @@
+form{
+    display: flex;
+    flex-direction: column;
+    font-size: 2vw;
+}
+form label::after{
+    content:":";
+}
+form input, form button{
+    font-size: 1.5vw;
+    width: 30vw;
+}
+form button{
+    cursor: pointer;
+}
+form p{
+    display: none;
+    color: red;
+}

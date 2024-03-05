@@ -16,7 +16,7 @@ class CartsManager {
 
                const cart = new this.cartModel(obj)
 
-               await cart.save()
+               return await cart.save()
 
 
           }
@@ -50,8 +50,7 @@ class CartsManager {
           try {
 
                const cart = await this.cartModel.findOne({ _id: id })
-
-
+               
                return cart
           }
           catch (err) {
@@ -67,7 +66,7 @@ class CartsManager {
               const cart = await this.cartModel.findOne({_id:cid}).lean()
               cart.products.push(pid)
 
-              await this.updateProducts(cid,cart.products)
+              return await this.updateProducts(cid,cart.products)
 
           }
           catch(err) {
@@ -82,7 +81,7 @@ class CartsManager {
 
                const update = { products: newProds }
 
-               await this.cartModel.findOneAndUpdate({ "_id": cid }, update).lean()
+               return await this.cartModel.findOneAndUpdate({ "_id": cid }, update).lean()
 
 
 
@@ -130,7 +129,7 @@ class CartsManager {
                     currentQuantity++
                }
 
-               await this.updateProducts(cid, newProds)
+               return await this.updateProducts(cid, newProds)
           }
           catch (err) {
                throw new Error(err)
@@ -171,7 +170,7 @@ class CartsManager {
           try {
 
 
-               await this.cartModel.findOneAndUpdate({ _id: cid }, { products: [] })
+               return await this.cartModel.findOneAndUpdate({ _id: cid }, { products: [] })
 
           }
           catch (err) {
@@ -187,7 +186,7 @@ class CartsManager {
               const cart = await this.cartModel.findOne({_id:cid}).lean()
               const newProds = cart.products.filter(x => x.toString() !== pid)
 
-              await this.updateProducts(cid,newProds)
+              return await this.updateProducts(cid,newProds)
           }
           catch(err) {
                console.error(err)

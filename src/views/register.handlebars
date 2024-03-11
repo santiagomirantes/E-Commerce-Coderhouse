@@ -1,29 +1,21 @@
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register</title>
-    <link rel="stylesheet" href="/styles/register.css" />
-  </head>
-  <body>
-    <form>
-      <label for="first_name">First Name</label>
-      <input type="text" id="first_name" name="first_name" />
-      <p id="first_name_error">The first name must have at least 8 characters (letters,numbers and underscores)</p>
-      <label for="last_name">Last Name</label>
-      <input type="text" id="last_name" name="last_name" />
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" />
-      <p id="email_error">Invalid email</p>
-      <label for="age">Age</label>
-      <input type="text" id="age" name="age" />
-      <p id="age_error">Invalid age</p>
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" />
-      <p id="password_error">The password must have at least 8 characters</p>
-      <button id="submit">Submit</button>
-    </form>
+<form>
+  <label for="first_name">First Name</label>
+  <input type="text" id="first_name" name="first_name" />
+  <p id="first_name_error">The first name must have at least 8 characters
+    (letters,numbers and underscores)</p>
+  <label for="last_name">Last Name</label>
+  <input type="text" id="last_name" name="last_name" />
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" />
+  <p id="email_error">Invalid email</p>
+  <label for="age">Age</label>
+  <input type="text" id="age" name="age" />
+  <p id="age_error">Invalid age</p>
+  <label for="password">Password</label>
+  <input type="password" id="password" name="password" />
+  <p id="password_error">The password must have at least 8 characters</p>
+  <p id="login">Already have an account? <a href="/login">Login</a></p>
+  <button id="submit">Submit</button>
+</form>
 
-    <script src="/scripts/register.js"></script>
-  </body>
-</html>
+<script src="/scripts/register.js"></script>

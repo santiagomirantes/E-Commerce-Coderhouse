@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     age: Number,
-    password: String
+    password: String,
+    role:String
 })
 
 let userModel

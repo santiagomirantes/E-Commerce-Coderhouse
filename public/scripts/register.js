@@ -1,12 +1,5 @@
 document.body.onload = async function () {
 
-    const check = await fetch("/api/sessions/check")
-    const obj = await check.json()
-
-
-    if (obj.isLogged) {
-        window.location.href = "/profile"
-    }
 
     const first_name = document.querySelector("#first_name")
     const first_name_error = document.querySelector("#first_name_error")

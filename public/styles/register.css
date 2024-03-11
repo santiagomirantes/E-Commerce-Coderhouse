@@ -17,3 +17,7 @@ form p{
     display: none;
     color: red;
 }
+form #login{
+    color:black;
+    display: unset;
+}

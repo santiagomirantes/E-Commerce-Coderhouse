@@ -10,70 +10,49 @@ class UsersManager {
             "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
             "!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@",
             "[", "]", "^", "_", "{", "|", "}", "~"
-        ]
+        ],
+        this.bcrypt = require("bcrypt"),
+        this.jwt = require("jsonwebtoken")
     }
 
-    createSessionID(email, password) {
 
-        let all = email.replace(" ", ",") + " " + password.replace(" ", ",")
-        let id = []
+    setupSession(res,email,password) {
 
-        all.split("").forEach(letter => {
+         const token = this.jwt.sign(
+            {email,password},
+            "AF6V<Q$[S!uw9EM*/kTv,5jH6=_T%5^4Apb?<a$PFkU",
+            {expiresIn:"24h"}
+         )
 
 
-            if (this.dict.includes(letter)) {
-                let pos = this.dict.indexOf(letter)
-                pos += all.length
-
-                while (pos > this.dict.length - 1) {
-                    pos -= this.dict.length
-                }
-
-                id.push(this.dict[pos])
-
-            }
-            else {
-                id.push(letter)
-            }
-        })
-
-        return id.reverse().join("")
+         return token
 
     }
 
-    decryptSessionID(sessionID) {
+    createHash(password) {
 
+        return this.bcrypt.hashSync(password,this.bcrypt.genSaltSync(10))
 
+    }
 
-        sessionID = sessionID.split("").reverse("")
-        const string = []
+    compareHash(password,hash) {
 
-        sessionID.forEach(letter => {
-            if (this.dict.includes(letter)) {
-                let pos = this.dict.indexOf(letter)
-                pos -= sessionID.length
-
-                while (pos < 0) {
-                    pos += this.dict.length
-                }
-
-                string.push(this.dict[pos])
-            }
-            else {
-                string.push(letter)
-            }
-        })
-
-
-        const arr = string.join("").split(" ")
-
-        return [arr[0].replace(",", " "), arr[1].replace(",", " ")]
+       return this.bcrypt.compareSync(password,hash)
 
     }
 
     async createUser(obj) {
 
         try {
+            if(obj.email === "adminCoder@coder.com" && obj.password === "adminCod3r123") {
+                obj.role = "admin"
+            }
+            else{
+                obj.role = "user"
+            }
+
+            obj.password = this.createHash(obj.password)
+
             return await this.userModel.create(obj)
         }
         catch (err) {
@@ -92,7 +71,7 @@ class UsersManager {
             if (user === null) {
                 throw new Error("invalid email.")
             }
-            else if (user.password !== obj.password) {
+            else if (!this.compareHash(obj.password,user.password)) {
                 throw new Error("invalid password.")
             }
 

@@ -10,6 +10,9 @@ const { CartsManager } = require("./dao/db/CartsManager")
 const { UsersManager } = require("./dao/db/UsersManager")
 const { connect } = require("./dao/db/connect")
 const session = require("express-session")
+const cookieParser = require("cookie-parser")
+const passport = require("passport")
+const {initPass} = require("./config/passport")
 
 /*creating the server and working with the imported packages*/
 
@@ -25,24 +28,31 @@ const io = new Server(server)
 
 const secret = "AF6V<Q$[S!uw9EM*/kTv,5jH6=_T%5^4Apb?<a$PFkU"
 
-app.use(session({
+/*app.use(session({
     secret,
     resave: false,
     saveUninitialized: true
-}));
+}));*/
+
+app.use(passport.initialize())
+initPass()
 
 
 /*handlebars*/
 
 const hbs = create({
     helpers: {
-        foo() { return "hey" }
+        capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1) }
     }
 })
 
 app.engine("handlebars", hbs.engine)
 app.set("view engine", "handlebars")
 app.set('views', path.join(__dirname, "views"));
+
+/*cookie-parser*/
+
+app.use(cookieParser())
 
 /*socket io*/
 
@@ -87,38 +97,38 @@ const productsRouter = require("./routes/products.router")
 const cartsRouter = require("./routes/carts.router")
 const sessionsRouter = require("./routes/sessions.router")
 
-app.get("/", async (req, res) => {
+app.get("/",passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
 
-    res.render("home", {})
+    res.render("home", {page:"home"})
 
 })
 
-app.get("/realtimeproducts", async (req, res) => {
+app.get("/realtimeproducts", passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
     try {
-        res.render("realTimeProducts", {})
+        res.render("realTimeProducts", {page:"products"})
     }
     catch (err) {
         res.send(err)
     }
 })
 
-app.get("/products", async (req, res) => {
+app.get("/products", passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
 
     try {
-        if (req.session.sessionID === undefined) {
+       /* if (req.session.sessionID === undefined) {
             return res.redirect("/login")
-        }
+        }*/
 
-        const data = await um.decryptSessionID(req.session.sessionID)
 
         const user = await um.login({
-            email: data[0],
-            password: data[1]
+            email: req.user.email,
+            password: req.user.password
         })
 
         const products = await pm.getProducts({}, 0, 5, null)
         const cartID = "65de29cc1887c456fbbca05c"
         res.render("products", {
+            page:"products",
             products: products.payload,
             cart: cartID,
             user
@@ -130,7 +140,7 @@ app.get("/products", async (req, res) => {
         }
     }
 })
-app.get("/cart", async (req, res) => {
+app.get("/cart", passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
     const cartID = "65de29cc1887c456fbbca05c"
 
     try {
@@ -142,7 +152,7 @@ app.get("/cart", async (req, res) => {
 
             products.push(await pm.getProductById(id))
         }
-        res.render("cart", { products })
+        res.render("cart", { page:"cart", products })
     }
     catch (err) {
         res.status(404).json({ error: err })
@@ -151,29 +161,25 @@ app.get("/cart", async (req, res) => {
 })
 
 app.get("/register", async (req, res) => {
-    res.render("register", {})
+    res.render("register", {page:"register"})
 })
 
 app.get("/login", async (req, res) => {
-    res.render("login", {})
+    res.render("login", {page:"login"})
 })
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
 
 
     try {
-        if (req.session.sessionID === undefined) {
-            return res.redirect("/login")
-        }
 
-        const data = await um.decryptSessionID(req.session.sessionID)
 
         const user = await um.login({
-            email: data[0],
-            password: data[1]
+            email: req.user.email,
+            password: req.user.password
         })
 
-        res.render("profile", { user })
+        res.render("profile", { user, page:"profile" })
     }
     catch (err) {
         res.status(404).json({ error: err.message })

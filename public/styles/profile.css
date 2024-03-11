@@ -1,0 +1,27 @@
+h1{
+    font-size: 3vw;
+    color: orange;
+}
+p, button{
+    font-size: 2vw;
+    text-transform: capitalize;
+}
+p{
+    color:orange;
+}
+span{
+    color: black;
+}
+#logout{
+    width: 10vw;
+    background-color: transparent;
+    border: 2px solid red;
+    color:red;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s;
+}
+#logout:hover{
+    background-color: red;
+    color:white;
+}

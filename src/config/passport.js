@@ -43,6 +43,7 @@ function initPass() {
             // Check if user already exists in your database
             let user = await um.userModel.findOne({email:profile._json.email})
             if (!user) {
+
                 // Create a new user in your database
                 const newUser = {
                     first_name:profile._json.name,
@@ -56,6 +57,8 @@ function initPass() {
 
                 return done(null,result)
             }
+
+            
             return done(null, user);
         } catch (err) {
             return done(err, false);
@@ -66,7 +69,7 @@ function initPass() {
 
 
 function checkAuth(req,res,next) {
-    return passport.authenticate(["jwt","github"],{failureRedirect:"/login", session:false})(req,res,next)
+    return passport.authenticate(["jwt"],{failureRedirect:"/login", session:false})(req,res,next)
 }
 
 module.exports = {initPass,checkAuth}

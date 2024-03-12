@@ -45,7 +45,9 @@ router.get("/github",passport.authenticate("github",{scope:["user:email"]}), asy
  })
 
 router.get("/githubcallback",passport.authenticate("github",{session:false,failureRedirect:"/login"}), async (req,res) => {
-    res.redirect("/products")
+    const token = um.setupSession(res,req.user.email,req.user.password)
+    console.log(token, req.user)
+    res.cookie("jwt",token).redirect("/products")
 })
 
 router.get("/logout", async (req,res) => {

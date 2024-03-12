@@ -119,6 +119,8 @@ app.get("/products", checkAuth, async (req, res) => {
             return res.redirect("/login")
         }*/
 
+        console.log("arrived", req.user)
+
 
         const user = await um.login({
             email: req.user.email,

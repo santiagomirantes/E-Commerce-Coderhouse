@@ -12,7 +12,7 @@ const { connect } = require("./dao/db/connect")
 const session = require("express-session")
 const cookieParser = require("cookie-parser")
 const passport = require("passport")
-const {initPass} = require("./config/passport")
+const {initPass,checkAuth} = require("./config/passport")
 
 /*creating the server and working with the imported packages*/
 
@@ -97,13 +97,13 @@ const productsRouter = require("./routes/products.router")
 const cartsRouter = require("./routes/carts.router")
 const sessionsRouter = require("./routes/sessions.router")
 
-app.get("/",passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
+app.get("/",checkAuth, async (req, res) => {
 
     res.render("home", {page:"home"})
 
 })
 
-app.get("/realtimeproducts", passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
+app.get("/realtimeproducts", checkAuth, async (req, res) => {
     try {
         res.render("realTimeProducts", {page:"products"})
     }
@@ -112,7 +112,7 @@ app.get("/realtimeproducts", passport.authenticate("jwt",{session:false,failureR
     }
 })
 
-app.get("/products", passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
+app.get("/products", checkAuth, async (req, res) => {
 
     try {
        /* if (req.session.sessionID === undefined) {
@@ -140,7 +140,7 @@ app.get("/products", passport.authenticate("jwt",{session:false,failureRedirect:
         }
     }
 })
-app.get("/cart", passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
+app.get("/cart", checkAuth, async (req, res) => {
     const cartID = "65de29cc1887c456fbbca05c"
 
     try {
@@ -168,7 +168,7 @@ app.get("/login", async (req, res) => {
     res.render("login", {page:"login"})
 })
 
-app.get("/profile", passport.authenticate("jwt",{session:false,failureRedirect:"/login"}), async (req, res) => {
+app.get("/profile", checkAuth, async (req, res) => {
 
 
     try {

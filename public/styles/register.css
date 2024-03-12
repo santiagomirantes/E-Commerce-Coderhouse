@@ -21,3 +21,17 @@ form #login{
     color:black;
     display: unset;
 }
+#github{
+    width: 25vw;
+    height: 10vh;
+    background-color: rgb(16, 18, 18);
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    display: flex;
+    font-weight: bold;
+    text-transform: uppercase;
+    align-items: center;
+    justify-content: center;
+    margin:5vh 0px;
+}

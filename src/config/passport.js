@@ -18,7 +18,7 @@ function cookieExtractor(req) {
 function initPass() {
     passport.use("jwt", new JWTStrategy({
         jwtFromRequest:JWTExtract.fromExtractors([cookieExtractor]),
-        secretOrKey:"AF6V<Q$[S!uw9EM*/kTv,5jH6=_T%5^4Apb?<a$PFkU"
+        secretOrKey:process.env.SESSION_SECRET
     },
      async(jwt_payload,done) => {
 
@@ -34,7 +34,7 @@ function initPass() {
      // GitHub Strategy
      passport.use("github",new GitHubStrategy({
         clientID: "Iv1.56d8431d3717c09e",
-        clientSecret: "4019d8cb0382d9fb81c7e976f441c61c0217b583",
+        clientSecret: process.env.GITHUB_SECRET,
         callbackURL: "http://localhost:8080/api/sessions/githubcallback"
     },
     async (accessToken, refreshToken, profile, done) => {

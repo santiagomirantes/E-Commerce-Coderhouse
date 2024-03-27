@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 async function connect() {
 
-const mongoURL = "mongodb+srv://santivmirantes:msf0608282020@coderproyect.r4wim2b.mongodb.net/ecommerce?retryWrites=true&w=majority"
+const mongoURL = process.env.MONGO_URL
 
 try{
     await mongoose.connect(mongoURL)

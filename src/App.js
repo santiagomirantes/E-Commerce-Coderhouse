@@ -1,5 +1,7 @@
 /*imports*/
 
+require("dotenv").config("../.env")
+
 const express = require("express")
 const path = require("path")
 const { create } = require("express-handlebars")

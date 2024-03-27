@@ -20,7 +20,7 @@ class UsersManager {
 
          const token = this.jwt.sign(
             {email,password},
-            "AF6V<Q$[S!uw9EM*/kTv,5jH6=_T%5^4Apb?<a$PFkU",
+            process.env.SESSION_SECRET,
             {expiresIn:"24h"}
          )
 

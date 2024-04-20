@@ -1,18 +1,17 @@
 const express = require("express")
 const router = express.Router()
-const UsersManager = require("../dao/db/UsersManager").UsersManager
-const passport = require("passport")
+const {UsersRepository} = require("../dao/factory")
 
-const um = new UsersManager()
+const passport = require("passport")
 
 router.post("/register", async (req,res) => {
     const obj = req.body
 
-
     try{
-       await um.createUser(obj)
 
-       um.setupSession(res,obj.email,obj.password)
+       await UsersRepository.createUser(obj)
+
+       UsersRepository.setupSession(res,obj.email,obj.password)
 
        res.send({status:"success"})
     }
@@ -23,19 +22,20 @@ router.post("/register", async (req,res) => {
 
 router.post("/login", async (req,res) => {
 
-     const obj = req.body
+    const obj = req.body
 
      try{
 
-         await um.login(obj)
+         await UsersRepository.login(obj)
 
-         const token = um.setupSession(res,obj.email,obj.password)
+         const token = UsersRepository.setupSession(res,obj.email,obj.password)
 
          res.cookie("jwt",token).send({status:"success"})
          
 
      }
      catch(err) {
+        console.log(err)
         res.status(401).json({error:err.message})
      }
 
@@ -45,7 +45,7 @@ router.get("/github",passport.authenticate("github",{scope:["user:email"]}), asy
  })
 
 router.get("/githubcallback",passport.authenticate("github",{session:false,failureRedirect:"/login"}), async (req,res) => {
-    const token = um.setupSession(res,req.user.email,req.user.password)
+    const token = UsersRepository.setupSession(res,req.user.email,req.user.password)
     res.cookie("jwt",token).redirect("/products")
 })
 

@@ -43,14 +43,8 @@ class UsersManager {
 
     async createUser(obj) {
 
-        try {
-            if(obj.email === "adminCoder@coder.com" && obj.password === "adminCod3r123") {
-                obj.role = "admin"
-            }
-            else{
-                obj.role = "user"
-            }
 
+        try {
             obj.password = this.createHash(obj.password)
 
             return await this.userModel.create(obj)
@@ -63,6 +57,7 @@ class UsersManager {
     }
 
     async login(obj) {
+
 
         try {
 
@@ -86,5 +81,6 @@ class UsersManager {
     }
 
 }
+
 
 module.exports = { UsersManager }

@@ -1,11 +1,9 @@
 const passjwt = require("passport-jwt")
 const passport = require("passport")
-const {UsersManager} = require("../dao/db/UsersManager")
+const {UsersRepository} = require("../dao/factory")
 const JWTStrategy = passjwt.Strategy
 const JWTExtract = passjwt.ExtractJwt
 const GitHubStrategy = require('passport-github2').Strategy
-
-const um = new UsersManager()
 
 function cookieExtractor(req) {
     let token = null;
@@ -41,7 +39,7 @@ function initPass() {
         try {
 
             // Check if user already exists in your database
-            let user = await um.userModel.findOne({email:profile._json.email})
+            let user = await UsersRepository.UsersManager.userModel.findOne({email:profile._json.email})
             if (!user) {
 
                 // Create a new user in your database
@@ -53,7 +51,7 @@ function initPass() {
                     password:""
                 }
 
-                const result = await um.userModel.create(newUser)
+                const result = await UsersRepository.UsersManager.userModel.create(newUser)
 
                 return done(null,result)
             }

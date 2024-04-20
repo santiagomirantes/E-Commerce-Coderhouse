@@ -1,4 +1,4 @@
-const { ProductsManager } = require("../dao/db/ProductsManager");
+const { ProductsManager, ProductDTO } = require("../dao/factory");
 const pm = new ProductsManager()
 const express = require("express")
 
@@ -57,7 +57,7 @@ router.get("/:id", async (req, res) => {
 })
 
 router.post("/", async (req,res) => {
-    const obj = req.body
+    const obj = new ProductDTO(req.body)
 
     try{
         await pm.addProduct(obj)
@@ -71,7 +71,7 @@ router.post("/", async (req,res) => {
 
 router.put("/:id", async (req,res) => {
 
-    const obj = req.body
+    const obj = new ProductDTO(req.body)
     const id = req.params.id
 
     try{

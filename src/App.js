@@ -2,15 +2,14 @@
 
 require("dotenv").config("../.env")
 
+
 const express = require("express")
 const path = require("path")
 const { create } = require("express-handlebars")
 const http = require('http');
 const { Server } = require('socket.io');
-const { ProductsManager } = require("./dao/db/ProductsManager")
-const { CartsManager } = require("./dao/db/CartsManager")
-const { UsersManager } = require("./dao/db/UsersManager")
-const { connect } = require("./dao/db/connect")
+const { ProductsManager,UsersRepository,CartsManager } = require("./dao/factory")
+const { connect } = require("./dao/Managers/Mongo/connect")
 const session = require("express-session")
 const cookieParser = require("cookie-parser")
 const passport = require("passport")
@@ -20,11 +19,11 @@ const {initPass,checkAuth} = require("./config/passport")
 
 const pm = new ProductsManager()
 const cm = new CartsManager()
-const um = new UsersManager()
 const app = express()
 const port = 8080 || process.env.PORT
 const server = http.createServer(app)
 const io = new Server(server)
+
 
 /*sessions*/
 
@@ -124,7 +123,7 @@ app.get("/products", checkAuth, async (req, res) => {
         console.log("arrived", req.user)
 
 
-        const user = await um.login({
+        const user = await UsersRepository.login({
             email: req.user.email,
             password: req.user.password
         })
@@ -178,7 +177,7 @@ app.get("/profile", checkAuth, async (req, res) => {
     try {
 
 
-        const user = await um.login({
+        const user = await UsersRepository.login({
             email: req.user.email,
             password: req.user.password
         })

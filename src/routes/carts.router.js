@@ -1,4 +1,4 @@
-const {CartsManager} = require("../dao/db/CartsManager")
+const {CartsManager} = require("../dao/factory")
 const cm = new CartsManager()
 const express = require("express")
 const router = express.Router()

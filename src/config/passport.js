@@ -67,7 +67,8 @@ function initPass() {
 
 
 function checkAuth(req,res,next) {
-    return passport.authenticate(["jwt"],{failureRedirect:"/login", session:false})(req,res,next)
+    const value = passport.authenticate(["jwt"],{failureRedirect:"/login", session:false})(req,res,next)
+    return value
 }
 
 module.exports = {initPass,checkAuth}

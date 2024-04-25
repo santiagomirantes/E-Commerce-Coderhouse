@@ -1,0 +1,27 @@
+<h1>Global chat</h1>
+
+<div id="chat">
+  {{#if hasMessages}}
+    {{#each messages}}
+    <div class="message">
+      <h3><span>{{this.from}}</span> {{this.date}}</h3>
+      <p>{{this.content}}</p>
+    </div>
+    {{/each}}
+
+  {{else}}
+    <h3>There aren´t any messages yet!</h3>
+  {{/if}}
+</div>
+
+<textarea>
+
+</textarea>
+
+{{#if isAdmin }}
+<p>Only users can add messages</p>
+{{else}}
+<button id="addMessage" onclick="addMessage()">Add message</button>
+{{/if}}
+
+<script src="/scripts/chat.js"></script>

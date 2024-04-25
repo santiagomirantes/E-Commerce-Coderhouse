@@ -1,16 +1,13 @@
-*{
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-
 h1{
     font-size: 3vw;
-    text-align: center;
     margin: 5vw;
 }
 
-#welcome span{
-    color:orange;
-}
 
 #products{
     display: flex;
@@ -36,4 +33,8 @@ h1{
 .product h3::before{
     content: "$";
     color: green;
+}
+
+button{
+    margin: 10vh 0vh;
 }

@@ -1,0 +1,24 @@
+main{
+    background-color: black;
+    color:white;
+    min-height: 100vh;
+    padding-left: 2vw;
+}
+textarea{
+    resize: none;
+    width: 50vw;
+}
+#chat{
+    display: flex;
+    flex-direction: column;
+    padding: 0vw 5vw;
+}
+.message{
+    color: white;
+    width: 80vw;
+    background-color: rgb(41, 41, 41);
+    border: 2px solid grey;
+}
+.message h3 span{
+   color: gold;
+}

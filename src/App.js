@@ -8,17 +8,13 @@ const path = require("path")
 const { create } = require("express-handlebars")
 const http = require('http');
 const { Server } = require('socket.io');
-const { ProductsManager,UsersRepository,CartsManager } = require("./dao/factory")
 const { connect } = require("./dao/Managers/Mongo/connect")
-const session = require("express-session")
 const cookieParser = require("cookie-parser")
 const passport = require("passport")
 const {initPass,checkAuth} = require("./config/passport")
 
 /*creating the server and working with the imported packages*/
 
-const pm = new ProductsManager()
-const cm = new CartsManager()
 const app = express()
 const port = 8080 || process.env.PORT
 const server = http.createServer(app)
@@ -94,8 +90,10 @@ app.use(async (req, res, next) => {
 
 /*Routers*/
 
+const baseRouter = require("./routes/base.router")
 const productsRouter = require("./routes/products.router")
 const cartsRouter = require("./routes/carts.router")
+const chatRouter = require("./routes/chat.router")
 const sessionsRouter = require("./routes/sessions.router")
 
 app.get("/",checkAuth, async (req, res) => {
@@ -104,93 +102,12 @@ app.get("/",checkAuth, async (req, res) => {
 
 })
 
-app.get("/realtimeproducts", checkAuth, async (req, res) => {
-    try {
-        res.render("realTimeProducts", {page:"products"})
-    }
-    catch (err) {
-        res.send(err)
-    }
-})
-
-app.get("/products", checkAuth, async (req, res) => {
-
-    try {
-       /* if (req.session.sessionID === undefined) {
-            return res.redirect("/login")
-        }*/
-
-        console.log("arrived", req.user)
 
 
-        const user = await UsersRepository.login({
-            email: req.user.email,
-            password: req.user.password
-        })
-
-        const products = await pm.getProducts({}, 0, 5, null)
-        const cartID = "65de29cc1887c456fbbca05c"
-        res.render("products", {
-            page:"products",
-            products: products.payload,
-            cart: cartID,
-            user
-        })
-    }
-    catch {
-        err => {
-            res.status(500).json({ error: err })
-        }
-    }
-})
-app.get("/cart", checkAuth, async (req, res) => {
-    const cartID = "65de29cc1887c456fbbca05c"
-
-    try {
-        const cart = await cm.getCartById(cartID)
-        const products = []
-
-        for (let id in cart.products) {
-            id = cart.products[id].toString()
-
-            products.push(await pm.getProductById(id))
-        }
-        res.render("cart", { page:"cart", products })
-    }
-    catch (err) {
-        res.status(404).json({ error: err })
-    }
-
-})
-
-app.get("/register", async (req, res) => {
-    res.render("register", {page:"register"})
-})
-
-app.get("/login", async (req, res) => {
-    res.render("login", {page:"login"})
-})
-
-app.get("/profile", checkAuth, async (req, res) => {
-
-
-    try {
-
-
-        const user = await UsersRepository.login({
-            email: req.user.email,
-            password: req.user.password
-        })
-
-        res.render("profile", { user, page:"profile" })
-    }
-    catch (err) {
-        res.status(404).json({ error: err.message })
-    }
-})
-
+app.use("/",baseRouter)
 app.use("/api/products", productsRouter.router)
 app.use("/api/carts", cartsRouter)
+app.use("/api/chat",chatRouter)
 app.use("/api/sessions", sessionsRouter)
 
 /*server launchment*/

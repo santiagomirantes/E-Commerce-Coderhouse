@@ -15,10 +15,17 @@
       <h3>{{this.price}}</h3>
       <p>{{this.description}}</p>
 
-      <button onclick="addToTheCart('{{../cart}}','{{this.id}}')">Añadir al carrito</button>
+      <button onClick="window.location.href = '/products/{{this.id}}'">See product</button>
+      {{#if ../isUser}}
+      <button onclick="addToTheCart('{{../cart}}','{{this.id}}')">Add to the cart</button>
+      {{/if}}
     </div>
     {{/each}}
     
+  </div>
+
+  <div>
+  <button id="addProduct" onclick="window.location.href='/addproduct'">Add product</button>
   </div>
 
   <script src="/scripts/products.js"></script>

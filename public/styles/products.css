@@ -1,7 +1,3 @@
-*{
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 h1{
     font-size: 3vw;
     text-align: center;
@@ -36,4 +32,13 @@ h1{
 .product h3::before{
     content: "$";
     color: green;
+}
+
+#addProduct{
+    font-size: 2vw;
+}
+div:has(#addProduct){
+    margin:5vh 0vh;
+    justify-content: center;
+    display: flex;
 }

@@ -16,7 +16,9 @@ class CartsManager {
 
                const cart = new this.cartModel(obj)
 
-               return await cart.save()
+               await cart.save()
+
+               return cart
 
 
           }

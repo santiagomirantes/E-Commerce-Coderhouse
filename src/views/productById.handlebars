@@ -1,0 +1,21 @@
+{{#if productExists}}
+<h3>{{product.code}}</h3>
+<h1>{{product.title}}</h1>
+<h3>{{product.category}}</h3>
+<h2>{{product.price}}</h2>
+<p>{{product.description}}</p>
+
+{{#if isAdmin}}
+<h3>Admin controls</h3>
+<button id="delete" onclick="deleteProduct('{{product._id}}')">Delete product</button>
+<button id="modify" onclick="window.location.href = '/modifyproduct/{{product._id}}'">Modify product</button>
+{{else}}
+<button id="addToCart" onclick="addToTheCart('{{cart}}','{{product._id}}')">Add to cart</button>
+{{/if}}
+{{else}}
+<h1>Couldn´t find the product</h1>
+{{/if}}
+
+<button onclick="window.location.href = '/products'">Go back to the products gallery</button>
+
+<script src="/scripts/productById.js"></script>

@@ -106,8 +106,7 @@ class ProductsManager {
             return products
         }
         catch (err) {
-            console.error(err)
-            throw new Error(err)
+            return null
         }
 
     }
@@ -144,8 +143,7 @@ class ProductsManager {
 
         try {
 
-
-            const deletedProduct = this.productModel.findOneAndDelete({ _id: id })
+            const deletedProduct = await this.productModel.findOneAndDelete({ _id: id })
 
             if (!deletedProduct) {
                 throw new Error("Product not found")

@@ -1,4 +1,4 @@
-class UserRepository{
+class UsersRepository{
      constructor(UsersManager, UsersDTO) {
         this.UsersManager = new UsersManager()
         this.UsersDTO = UsersDTO
@@ -18,13 +18,17 @@ class UserRepository{
 
      async createUser(obj) {
           obj = new this.UsersDTO(obj)
-          return this.UsersManager.createUser(obj)
+          return await this.UsersManager.createUser(obj)
+     }
+
+     async getUsernameById(id) {
+          return await this.UsersManager.getUsernameById(id)
      }
 
      async login(obj) {
         obj = new this.UsersDTO(obj)
-        return this.UsersManager.login(obj)
+        return await this.UsersManager.login(obj)
      }
 }
 
-module.exports = UserRepository
+module.exports = UsersRepository

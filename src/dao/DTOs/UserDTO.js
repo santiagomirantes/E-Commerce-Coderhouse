@@ -5,6 +5,7 @@ class UserDTO{
          this.email = user.email
          this.age = isNaN(parseInt(user.age)) ? 18 : parseInt(user.age)
          this.password = user.password
+         this.cart = user.cart
          this.role = user.email === "adminCoder@coder.com" && user.password === "adminCod3r123" ? "admin" : "user"
     }
 }

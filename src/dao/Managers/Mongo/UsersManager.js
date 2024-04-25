@@ -2,6 +2,8 @@ class UsersManager {
 
     constructor() {
         this.userModel = require("./models/user.model")
+        const CartsManager = require("./CartsManager").CartsManager
+        this.CartsManager = new CartsManager()
         this.dict = [
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
             "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
@@ -45,6 +47,13 @@ class UsersManager {
 
 
         try {
+
+            const cart = await this.CartsManager.createCart({
+                products:[]
+            })
+
+            obj.cart = cart._id
+            
             obj.password = this.createHash(obj.password)
 
             return await this.userModel.create(obj)
@@ -54,6 +63,16 @@ class UsersManager {
             throw new Error(err)
         }
 
+    }
+
+    async getUsernameById(id) {
+         const user = await this.userModel.findOne({_id:id})
+
+         if(user === null) {
+            throw new Error("Couldn´t find any user with the id: " + id)
+         }
+
+         return user.first_name + user.last_name
     }
 
     async login(obj) {

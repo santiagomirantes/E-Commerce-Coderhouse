@@ -138,15 +138,5 @@ class ProductsManager {
 
 }
 
-/*const pm = new ProductManager()
-
-pm.addProduct({
-    title:"Test product 3",
-    description:"A test product 3",
-    price:3100,
-    thumbnail:"media/someimage3.png",
-    code:3,
-    stock:7
-})*/
 
 module.exports = { ProductsManager }

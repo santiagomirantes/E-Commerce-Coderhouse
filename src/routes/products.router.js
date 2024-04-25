@@ -1,6 +1,6 @@
-const { ProductsManager, ProductDTO } = require("../dao/factory");
-const pm = new ProductsManager()
+const { ProductsRepository, UsersRepository } = require("../dao/factory");
 const express = require("express")
+const {checkAuth} = require("../config/passport")
 
 const router = express.Router()
 
@@ -9,15 +9,15 @@ let socket
 const setupIO = async (received) => {
 
     socket = received
-  
-  
-      const products = await pm.getProducts()
-      socket.emit('update', products);
-  
-      socket.on('disconnect', () => {
+
+
+    const products = await ProductsRepository.getProducts()
+    socket.emit('update', products);
+
+    socket.on('disconnect', () => {
         console.log('User disconnected from the products route');
-      });
-  };
+    });
+};
 
 
 
@@ -31,70 +31,80 @@ router.get("/", async (req, res) => {
         const limit = req.query.limit === undefined ? 10 : parseInt(req.query.limit)
         const sort = req.query.sort
 
-        
-        const products = await pm.getProducts(query,page, limit, sort)
-        
+
+        const products = await ProductsRepository.getProducts(query, page, limit, sort)
+
 
         res.send(JSON.stringify(products))
 
     }
-    catch(err) {
+    catch (err) {
         console.log(err)
-        res.status(500).json({error:err.message})
+        res.status(500).json({ error: err.message })
     }
 })
 
 router.get("/:id", async (req, res) => {
     const id = req.params.id
     try {
-        const product = await pm.getProductById(id)
+        const product = await ProductsRepository.getProductById(id)
         res.send(JSON.stringify(product))
     }
     catch (err) {
-        res.status(404).json({error:err.message})
+        res.status(404).json({ error: err.message })
     }
 
 })
 
-router.post("/", async (req,res) => {
-    const obj = new ProductDTO(req.body)
+router.post("/", async (req, res) => {
+    const obj = req.body
 
-    try{
-        await pm.addProduct(obj)
-        socket.emit("update",await pm.getProducts())
+    try {
+        await ProductsRepository.addProduct(obj)
+        res.send("success")
     }
-    catch(err) {
+    catch (err) {
         console.log(err)
-        res.status(400).json({error:err.message})
+        res.status(400).json({ error: err.message })
     }
 })
 
-router.put("/:id", async (req,res) => {
+router.put("/:id", async (req, res) => {
 
-    const obj = new ProductDTO(req.body)
+    const obj = req.body
     const id = req.params.id
 
-    try{
-        await pm.updateProduct(id,obj)
-        socket.emit("update",await pm.getProducts())
+    try {
+        await ProductsRepository.updateProduct(id, obj)
+        res.send("success")
     }
-    catch(err) {
-        res.status(400).json({error:err.message})
+    catch (err) {
+        res.status(400).json({ error: err.message })
     }
 })
 
-router.delete("/:id", async (req,res) => {
+router.delete("/:id",checkAuth, async (req, res) => {
+
 
     const id = req.params.id
 
-    try{
-        await pm.deleteProduct(id)
-        socket.emit("update",await pm.getProducts())
+    try {
+        const user = await UsersRepository.login({
+            email: req.user.email,
+            password: req.user.password
+        })
+
+        if (user.role === "admin") {
+            await ProductsRepository.deleteProduct(id)
+        }
+
+        res.send("success")
     }
-    catch(err) {
-        res.status(400).json({error:err.message})
+    catch (err) {
+        console.log(err)
+        res.status(400).json({ error: err.message })
     }
 
 })
 
-module.exports = {router,setupIO}
+module.exports = { router, setupIO }

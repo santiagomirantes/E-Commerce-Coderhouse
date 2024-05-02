@@ -2,6 +2,8 @@ const { MessagesRepository, UsersRepository } = require("../dao/factory")
 const express = require("express")
 const router = express.Router()
 const { checkAuth } = require("../config/passport");
+const {CustomError} = require("../errors/CustomError")
+const {getError} = require("../errors/errorsDict")
 
 router.post("/", checkAuth, async (req, res) => {
     const obj = req.body
@@ -13,6 +15,7 @@ router.post("/", checkAuth, async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
         console.log(err)
         res.status(500).json({ error: err.message })
     }

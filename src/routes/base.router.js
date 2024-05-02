@@ -2,6 +2,7 @@ const { ProductsRepository, UsersRepository, CartsRepository, MessagesRepository
 const { RestrictedUserDTO } = require("../dao/DTOs/RestrictedUserDTO")
 const express = require("express")
 const { checkAuth } = require("../config/passport");
+const Mocks = require("../mocks/Mocks")
 
 const router = express.Router()
 
@@ -218,6 +219,22 @@ router.get("/chat", checkAuth, async (req, res) => {
     catch (err) {
         console.log(err)
         res.status(500).send({ json: err.message })
+    }
+})
+
+const mocks = new Mocks()
+
+router.get("/mockingproducts", async (req,res) => {
+    try{
+       const products = []
+       for(let i = 0; i < 100; i++) {
+         products.push(mocks.generateProduct())
+       }
+       res.send(products)
+    }
+    catch(err) {
+        console.log(err)
+        res.status(500).json({error:err.message})
     }
 })
 

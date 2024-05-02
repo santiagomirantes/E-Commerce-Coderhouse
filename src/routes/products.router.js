@@ -1,6 +1,8 @@
 const { ProductsRepository, UsersRepository } = require("../dao/factory");
 const express = require("express")
 const {checkAuth} = require("../config/passport")
+const {CustomError} = require("../errors/CustomError")
+const {getError} = require("../errors/errorsDict")
 
 const router = express.Router()
 
@@ -39,6 +41,7 @@ router.get("/", async (req, res) => {
 
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
         console.log(err)
         res.status(500).json({ error: err.message })
     }
@@ -51,6 +54,8 @@ router.get("/:id", async (req, res) => {
         res.send(JSON.stringify(product))
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(404).json({ error: err.message })
     }
 
@@ -64,6 +69,7 @@ router.post("/", async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
         console.log(err)
         res.status(400).json({ error: err.message })
     }
@@ -79,6 +85,8 @@ router.put("/:id", async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(400).json({ error: err.message })
     }
 })
@@ -101,6 +109,7 @@ router.delete("/:id",checkAuth, async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
         console.log(err)
         res.status(400).json({ error: err.message })
     }

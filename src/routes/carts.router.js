@@ -1,5 +1,7 @@
 const { checkAuth } = require("../config/passport")
 const { CartsRepository, ProductsRepository, UsersRepository, TicketsRepository } = require("../dao/factory")
+const {CustomError} = require("../errors/CustomError")
+const {getError} = require("../errors/errorsDict")
 const express = require("express")
 const router = express.Router()
 
@@ -12,7 +14,8 @@ router.get("/", async (req, res) => {
         res.send(carts)
     }
     catch (err) {
-
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(500).send({ error: err.message })
 
     }
@@ -28,6 +31,8 @@ router.get("/:id", async (req, res) => {
         res.send(cart)
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(401).send({ error: err.message })
     }
 })
@@ -39,6 +44,8 @@ router.post("/", async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(401).json({ error: err.message })
     }
 })
@@ -54,6 +61,8 @@ router.post("/:cid/products/:pid", async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(401).json({ error: err.message })
     }
 
@@ -69,6 +78,8 @@ router.put("/:cid", async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(500).json({ erorr: err.message })
     }
 
@@ -87,6 +98,8 @@ router.put("/:cid/products/:pid/quantity/:quantity", async (req, res) => {
 
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(401).json({ error: err.message })
     }
 
@@ -101,6 +114,8 @@ router.delete("/:cid", async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(500).json({ error: err.message })
     }
 
@@ -117,6 +132,8 @@ router.delete("/:cid/products/:pid", async (req, res) => {
         res.send("success")
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(401).json({ error: err.message })
     }
 })
@@ -160,6 +177,7 @@ router.get("/:cid/purchase", checkAuth, async (req, res) => {
         
     }
     catch (err) {
+        err = new CustomError(getError(err.message))
         console.log(err)
         res.status(500).send()
     }

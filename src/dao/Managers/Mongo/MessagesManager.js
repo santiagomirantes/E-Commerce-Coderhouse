@@ -6,7 +6,7 @@ class MessagesManager{
 
     async addMessage(obj) {
            if(typeof obj.from !== "string" || typeof obj.content !== "string") {
-              throw new Error("Invalid properties passed to MessagesManager.addMessage()")
+              throw new Error("Invalid arguments passed to MessagesManager.addMessage()")
            }
 
            const user = await this.userModel.findOne({email:obj.from})

@@ -6,7 +6,7 @@ class TicketsManager{
 
     async createTicket(obj) {
         if(typeof obj.amount !== "number" || typeof obj.purchaser !== "string") {
-            throw new Error(`Invalid parameters passed to TicketsManager.addTicket`)
+            throw new Error(`Invalid arguments passed to TicketsManager.addTicket`)
         }
 
         const user = await this.userModel.findOne({_id:obj.purchaser})

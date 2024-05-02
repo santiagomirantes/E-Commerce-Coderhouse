@@ -21,7 +21,6 @@ class ProductsManager {
         let isEmpty = this.checkIfEmpty(obj)
 
         if (isEmpty) {
-            console.error("There are arguments missing to create a new product.")
             throw new Error("There are arguments missing to create a new product.")
         }
 

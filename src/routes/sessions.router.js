@@ -1,6 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const {UsersRepository} = require("../dao/factory")
+const {CustomError} = require("../errors/CustomError")
+const {getError} = require("../errors/errorsDict")
 
 const passport = require("passport")
 
@@ -16,6 +18,8 @@ router.post("/register", async (req,res) => {
        res.send({status:"success"})
     }
     catch(err) {
+        err = new CustomError(getError(err.message))
+        console.log(err)
         res.status(500).json({error:err.message})
     }
 })
@@ -35,7 +39,6 @@ router.post("/login", async (req,res) => {
 
      }
      catch(err) {
-        console.log(err)
         res.status(401).json({error:err.message})
      }
 
@@ -55,6 +58,7 @@ router.get("/logout", async (req,res) => {
           res.clearCookie("jwt").send({status:"success"})
      }
      catch(err) {
+        err = new CustomError(getError(err.message))
         console.log(err)
         res.status(500).json({error:err.message})
      }

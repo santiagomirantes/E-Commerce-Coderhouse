@@ -34,7 +34,6 @@ class ProductsManager {
 
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 
@@ -90,7 +89,6 @@ class ProductsManager {
             }
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 
@@ -131,7 +129,6 @@ class ProductsManager {
 
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 
@@ -152,7 +149,6 @@ class ProductsManager {
 
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 

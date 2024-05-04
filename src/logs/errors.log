@@ -1,0 +1,3 @@
+{"level":"warning","message":"Warning!!"}
+{"level":"error","message":"Some random error"}
+{"level":"fatal","message":"A fatal error, kill the server"}

@@ -59,7 +59,6 @@ class UsersManager {
             return await this.userModel.create(obj)
         }
         catch (err) {
-            console.log(err)
             throw new Error(err)
         }
 

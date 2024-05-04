@@ -22,7 +22,7 @@ router.get("/products", checkAuth, async (req, res) => {
              return res.redirect("/login")
          }*/
 
-        console.log("arrived", req.user)
+        req.logger.info("arrived", req.user)
 
 
         const user = await UsersRepository.login({
@@ -174,7 +174,7 @@ router.get("/modifyproduct/:pid", checkAuth, async (req, res) => {
 
     }
     catch (err) {
-        console.log(err)
+        req.logger.fatal(err)
         res.status(500).json({ error: err.message, product })
     }
 })
@@ -194,7 +194,7 @@ router.get("/addproduct", checkAuth, async (req, res) => {
         res.render("addProduct", { page: "addProduct" })
     }
     catch (err) {
-        console.log(err)
+        req.logger.fatal(err)
         res.status(500).send({ json: err.message })
     }
 })
@@ -217,7 +217,7 @@ router.get("/chat", checkAuth, async (req, res) => {
         res.render("chat", { page: "chat", messages, hasMessages: messages.length > 0, isAdmin: user.role === "admin" })
     }
     catch (err) {
-        console.log(err)
+        req.logger.fatal(err)
         res.status(500).send({ json: err.message })
     }
 })
@@ -233,9 +233,19 @@ router.get("/mockingproducts", async (req,res) => {
        res.send(products)
     }
     catch(err) {
-        console.log(err)
+        req.logger.fatal(err)
         res.status(500).json({error:err.message})
     }
+})
+
+router.get("/loggerTest", async (req,res) => {
+    req.logger.debug("this is the less important log")
+    req.logger.http("An http log")
+    req.logger.info("This will show in production")
+    req.logger.warning("Warning!!")
+    req.logger.error("Some random error")
+    req.logger.fatal("A fatal error, kill the server")
+    res.send("success")
 })
 
 module.exports = router

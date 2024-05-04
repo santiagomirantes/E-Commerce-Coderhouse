@@ -19,7 +19,7 @@ router.post("/register", async (req,res) => {
     }
     catch(err) {
         err = new CustomError(getError(err.message))
-        console.log(err)
+        req.logger.error(err)
         res.status(500).json({error:err.message})
     }
 })
@@ -59,7 +59,7 @@ router.get("/logout", async (req,res) => {
      }
      catch(err) {
         err = new CustomError(getError(err.message))
-        console.log(err)
+        req.logger.error(err)
         res.status(500).json({error:err.message})
      }
 

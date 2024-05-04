@@ -22,7 +22,6 @@ class CartsManager {
 
           }
           catch (err) {
-               console.error(err)
                throw new Error(err)
           }
 
@@ -40,7 +39,6 @@ class CartsManager {
                return carts
           }
           catch (err) {
-               console.error(err)
                throw new Error(err)
           }
 
@@ -55,7 +53,6 @@ class CartsManager {
                return cart
           }
           catch (err) {
-               console.error(err)
                throw new Error(err)
           }
 
@@ -184,7 +181,6 @@ class CartsManager {
 
           }
           catch (err) {
-               console.error(err)
                throw new Error(err)
           } 
 
@@ -207,7 +203,6 @@ class CartsManager {
 
           }
           catch (err) {
-               console.error(err)
                throw new Error(err)
           }
 
@@ -227,7 +222,6 @@ class CartsManager {
                return cart
           }
           catch (err) {
-               console.error(err)
                throw new Error(err)
           }
 

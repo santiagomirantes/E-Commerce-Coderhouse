@@ -22,7 +22,7 @@ class ProductsManager {
         let isEmpty = this.checkIfEmpty(obj)
 
         if (isEmpty) {
-            console.error("There are arguments missing to create a new product.")
+
             throw new Error("There are arguments missing to create a new product.")
         }
 
@@ -37,7 +37,6 @@ class ProductsManager {
 
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 
@@ -90,7 +89,6 @@ class ProductsManager {
 
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 
@@ -105,7 +103,6 @@ class ProductsManager {
             return products
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 
@@ -144,7 +141,6 @@ class ProductsManager {
 
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 
@@ -162,7 +158,6 @@ class ProductsManager {
 
         }
         catch (err) {
-            console.error(err)
             throw new Error(err)
         }
 

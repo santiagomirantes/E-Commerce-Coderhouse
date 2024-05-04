@@ -12,6 +12,7 @@ const { connect } = require("./dao/Managers/Mongo/connect")
 const cookieParser = require("cookie-parser")
 const passport = require("passport")
 const {initPass,checkAuth} = require("./config/passport")
+const addLogger = require("./config/logger")
 
 /*creating the server and working with the imported packages*/
 
@@ -72,6 +73,10 @@ io.on('connection', (socket) => {
     });
 });
 
+/*Winston*/
+
+app.use(addLogger)
+
 
 /*using*/
 
@@ -83,7 +88,7 @@ app.use(async (req, res, next) => {
         await connect()
         next()
     } catch (error) {
-        console.error('Failed to connect to database:', error);
+        req.logger.fatal('Failed to connect to database:', error);
         res.status(500).send('Failed to connect to database');
     }
 });

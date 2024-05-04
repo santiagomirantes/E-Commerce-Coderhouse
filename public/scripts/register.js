@@ -63,7 +63,6 @@ document.body.onload = async function () {
             .then(async res => {
 
                 const obj = await res.json()
-                console.log(obj)
 
                 if (obj.status === "success") {
                     window.location.href = "/products"

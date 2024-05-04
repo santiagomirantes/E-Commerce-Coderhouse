@@ -50,7 +50,6 @@ class UsersManager {
             this.users.push(obj)
         }
         catch (err) {
-            console.log(err)
             throw new Error(err)
         }
 

@@ -42,7 +42,7 @@ router.get("/", async (req, res) => {
     }
     catch (err) {
         err = new CustomError(getError(err.message))
-        console.log(err)
+        req.logger.error(err)
         res.status(500).json({ error: err.message })
     }
 })
@@ -55,7 +55,7 @@ router.get("/:id", async (req, res) => {
     }
     catch (err) {
         err = new CustomError(getError(err.message))
-        console.log(err)
+        req.logger.error(err)
         res.status(404).json({ error: err.message })
     }
 
@@ -70,7 +70,7 @@ router.post("/", async (req, res) => {
     }
     catch (err) {
         err = new CustomError(getError(err.message))
-        console.log(err)
+        req.logger.error(err)
         res.status(400).json({ error: err.message })
     }
 })
@@ -86,7 +86,7 @@ router.put("/:id", async (req, res) => {
     }
     catch (err) {
         err = new CustomError(getError(err.message))
-        console.log(err)
+        req.logger.error(err)
         res.status(400).json({ error: err.message })
     }
 })
@@ -110,7 +110,7 @@ router.delete("/:id",checkAuth, async (req, res) => {
     }
     catch (err) {
         err = new CustomError(getError(err.message))
-        console.log(err)
+        req.logger.error(err)
         res.status(400).json({ error: err.message })
     }
 

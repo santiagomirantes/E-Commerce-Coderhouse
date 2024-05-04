@@ -16,7 +16,7 @@ router.post("/", checkAuth, async (req, res) => {
     }
     catch (err) {
         err = new CustomError(getError(err.message))
-        console.log(err)
+        req.logger.error(err)
         res.status(500).json({ error: err.message })
     }
 })

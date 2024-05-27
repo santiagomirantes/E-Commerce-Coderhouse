@@ -1,0 +1,52 @@
+paths:
+  /api/chat/:
+    post:
+      summary: add a new message
+      tags:
+        - Chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/Message"
+      responses:
+        "200":
+          description: message added succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error or user is not logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: message of the error
+      example:
+        error: internal server error
+    Success:
+      type: object
+      properties:
+        status:
+          type: string
+          description: status of the request
+      example:
+        status: success
+  requestBodies:
+    Message:
+      type: object
+      properties:
+        content:
+          type: String
+          description: content of the message   
+      example:
+        content: hello world!

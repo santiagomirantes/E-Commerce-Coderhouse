@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kubeusers
+  template:
+    metadata:
+      labels:
+        app: kubeusers
+    spec:
+      containers:
+      - name: kubecontainer
+        image: nginx:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_URL
+          value: mongodb+srv://santivmirantes:msf0608282020@coderproyect.r4wim2b.mongodb.net/ecommerce?retryWrites=true&w=majority
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-service
+spec:
+  selector:
+    app: kubeusers
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer

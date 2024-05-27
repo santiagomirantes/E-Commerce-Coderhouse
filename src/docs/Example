@@ -1,0 +1,54 @@
+paths:
+  /base/{?param}:
+    get:
+      summary: description
+      tags:
+        - Class
+    #       IF IT NEEDS PARAMS
+      parameters:
+        - name: param
+          in: path
+          required: true
+          description: description of param
+          schema:
+            $type: string
+    #       IF IT NEEDS A BODY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/BODY"
+      responses:
+        "200":
+          description: description
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Class"
+#if type is object just put $ref
+components:
+  schemas:
+    Class:
+      type: object
+      properties:
+        _id:
+          type: ObjectID
+          description: description
+        prop:
+          type: string
+          description: description
+      example:
+        _id: ObjectID("66253da08e27f7fd04fbbc00")
+        prop: value
+  requestBodies:
+    BodyName:
+      type: object
+      properties:
+        prop:
+          type: string
+          description: description
+      example:
+        prop: value

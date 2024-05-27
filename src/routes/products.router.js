@@ -66,7 +66,7 @@ router.post("/", async (req, res) => {
 
     try {
         await ProductsRepository.addProduct(obj)
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))
@@ -82,7 +82,7 @@ router.put("/:id", async (req, res) => {
 
     try {
         await ProductsRepository.updateProduct(id, obj)
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))
@@ -106,7 +106,7 @@ router.delete("/:id",checkAuth, async (req, res) => {
             await ProductsRepository.deleteProduct(id)
         }
 
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))

@@ -1,0 +1,235 @@
+paths:
+  /api/products:
+    get:
+      summary: get an array of products
+      tags:
+        - Product
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: query (requirements of the search)
+          schema:
+            $type: string
+        - name: page
+          in: query
+          required: true
+          description: page of the search
+          schema:
+            $type: string
+        - name: limit
+          in: query
+          required: true
+          description: amount of products that each page must have
+          schema:
+            $type: string
+        - name: sort
+          in: query
+          required: true
+          description: "'asc' for ascendent and 'desc' for descendent"
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: products got succesfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+    post:
+      summary: add a new prodcut
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/Product"
+      responses:
+        "200":
+          description: product created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error or incomplete product
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+  /api/products/{?uuid}:
+    get:
+      summary: get a product by it´s id
+      tags:
+        - Product
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: ObjectID of product
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: product obtained succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Product"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+    put:
+      summary: modify a product
+      tags:
+        - Product
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: ObjectID of product
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/Product"
+      responses:
+        "200":
+          description: product modified succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+    delete:
+      summary: delete a product by it´s id
+      tags:
+        - Product
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: ObjectID of product
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: product deleted succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error or product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: message of the error
+      example:
+        error: internal server error
+    Success:
+      type: object
+      properties:
+        status:
+          type: string
+          description: status of the request
+      example:
+        status: success
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectID
+          description: description
+        title:
+          type: string
+          description: name of product
+        description:
+          type: string
+          description: details of the product
+        price:
+          type: number
+          description: price of the product in dollars
+        code:
+          type: number
+          description: comercial identifier of the product
+        stock:
+          type: number
+          description: amount of products left
+        status:
+          type: boolean
+          description: true if available, false if not
+        category:
+          type: string
+          description: classification of the product
+      example:
+        _id: ObjectID("66253da08e27f7fd04fbbc00")
+        title: test product 1
+        description: an awesome test product!
+        price: 1200
+        code: 1234
+        stock: 15
+        status: true
+        category: Testing
+  requestBodies:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: name of product
+        description:
+          type: string
+          description: details of the product
+        price:
+          type: number
+          description: price of the product in dollars
+        code:
+          type: number
+          description: comercial identifier of the product
+        stock:
+          type: number
+          description: amount of products left
+        status:
+          type: boolean
+          description: true if available, false if not
+        category:
+          type: string
+          description: classification of the product
+      example:
+        title: test product 1
+        description: an awesome test product!
+        price: 1200
+        code: 1234
+        stock: 15
+        status: true
+        category: Testing

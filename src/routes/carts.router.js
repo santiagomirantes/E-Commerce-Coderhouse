@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
 
     try {
         await CartsRepository.createCart(obj)
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))
@@ -58,7 +58,7 @@ router.post("/:cid/products/:pid", async (req, res) => {
 
     try {
         await CartsRepository.addProduct(cid, pid)
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))
@@ -75,12 +75,12 @@ router.put("/:cid", async (req, res) => {
 
     try {
         await CartsRepository.updateProducts(cid, products)
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))
         req.logger.error(err)
-        res.status(500).json({ erorr: err.message })
+        res.status(500).json({ error: err.message })
     }
 
 })
@@ -94,7 +94,7 @@ router.put("/:cid/products/:pid/quantity/:quantity", async (req, res) => {
     try {
 
         await CartsRepository.updateProductQuantity(cid, pid, quantity)
-        res.send("success")
+        res.send({status:"success"})
 
     }
     catch (err) {
@@ -111,7 +111,7 @@ router.delete("/:cid", async (req, res) => {
 
     try {
         await CartsRepository.deleteCartProducts(cid)
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))
@@ -129,7 +129,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
 
     try {
         await CartsRepository.deleteProductFromCart(cid, pid)
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))

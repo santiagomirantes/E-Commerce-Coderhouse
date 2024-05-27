@@ -12,7 +12,7 @@ router.post("/", checkAuth, async (req, res) => {
         obj.from = req.user.email
 
         await MessagesRepository.addMessage(obj)
-        res.send("success")
+        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))

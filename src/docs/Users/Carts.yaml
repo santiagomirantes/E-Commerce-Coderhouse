@@ -1,0 +1,300 @@
+paths:
+  /api/carts:
+    get:
+      summary: get all carts
+      tags:
+        - Cart
+      responses:
+        "200":
+          description: succesfully got all carts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+    post:
+      summary: create a new cart
+      tags:
+        - Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/Cart"
+      responses:
+        "200":
+          description: cart created succesfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#components/schemas/Error"
+  /api/carts/{?uuid}:
+    get:
+      summary: get a cart by it´s id
+      tags:
+        - Cart
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: ObjectID of cart
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: cart obtained succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "500":
+          description: cart not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+    put:
+      summary: update products of a cart
+      tags:
+        - Cart
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: ObjectID of the cart
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/Cart"
+      responses:
+        "200":
+          description: products updated succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error or products not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+    delete:
+      summary: delete a cart
+      tags:
+        - Cart
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: ObjectID of the cart
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: cart deleted succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error or cart not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+  /api/carts/{?cid}/products/{?pid}:
+    post:
+      summary: adds a product to a cart by their ids
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ObjectID of cart
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: ObjectID of product
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: product added succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error or product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+    delete:
+      summary: delete all the products with a specific ObjectID from the cart
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ObjectID of cart
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: ObjectID of product
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: product deleted succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error or cart not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+  /api/carts/{?cid}/products/{?pid}/quantity/{?quantity}:
+    put:
+      summary: update the quantity of a certain product in a cart
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ObjectID of cart
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: ObjectID of product
+          schema:
+            $type: string
+        - name: quantity
+          in: path
+          required: true
+          description: final quantity of products
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: product's quantity updated succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Success"
+        "500":
+          description: internal server error or product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+  /api/carts/{?cid}/purchase:
+    get:
+      summary: buy all products of a cart
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ObjectID of cart
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: purchase made succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Ticket"
+        "500":
+          description: internal server error or cart not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Error"
+components:
+  schemas:
+    Success:
+      type: object
+      properties:
+        status:
+          type: string
+          description: status of the request
+      example:
+        status: success
+    Error:
+      type: object
+      properties:
+        error:
+          type: String
+          description: error message
+      example:
+        error: internal server error
+    Ticket:
+      type: string
+      example: |-
+        ----PURCHASE TICKET----
+        Purchaser Username: John Doe
+        Purchaser Email: johndoe@johndoe.com
+        Payment amount: 3
+        Purchase datetime: 27/05/2024 8:35:11
+        -----------------------
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectID
+          description: auto-generated ID of the cart
+        products:
+          type: array
+          description: array of products
+      example:
+        _id: ObjectID("66253da08e27f7fd04fbbc00")
+        products:
+          - ObjectID("66253da08e27f7fd04fbbc01")
+  requestBodies:
+    Cart:
+      type: object
+      properties:
+        products:
+          type: array
+          description: array of products
+      example:
+        products:
+          - ObjectID("66253da08e27f7fd04fbbc03")
+          - ObjectID("66253da08e27f7fd04fbbc04")

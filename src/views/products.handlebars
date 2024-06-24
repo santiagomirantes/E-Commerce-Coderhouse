@@ -17,7 +17,7 @@
 
       <button onClick="window.location.href = '/products/{{this.id}}'">See product</button>
       {{#if ../isUser}}
-      <button onclick="addToTheCart('{{../cart}}','{{this.id}}')">Add to the cart</button>
+      <button onclick="addToTheCart('{{../cart}}','{{this.id}}','{{../isPremium}}','{{../user.email}}','{{this.owner}}')">Add to the cart</button>
       {{/if}}
     </div>
     {{/each}}

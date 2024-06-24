@@ -1,8 +1,8 @@
 const { ProductsRepository, UsersRepository } = require("../dao/factory");
 const express = require("express")
-const {checkAuth} = require("../config/passport")
-const {CustomError} = require("../errors/CustomError")
-const {getError} = require("../errors/errorsDict")
+const { checkAuth } = require("../config/passport")
+const { CustomError } = require("../errors/CustomError")
+const { getError } = require("../errors/errorsDict")
 
 const router = express.Router()
 
@@ -61,12 +61,27 @@ router.get("/:id", async (req, res) => {
 
 })
 
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
     const obj = req.body
+    if (req.user !== undefined) {
+        const user = await UsersRepository.login({
+            email: req.user.email,
+            password: req.user.password
+        })
+        if (user.role === "premium" || user.role === "admin") {
+            obj.owner = req.user.email
+        }
+        else{
+            res.status(401).json({error:"Invalid username role"})
+        }
+    }
+    else{
+        res.status(401)
+    }
 
     try {
         await ProductsRepository.addProduct(obj)
-        res.send({status:"success"})
+        res.send({ status: "success" })
     }
     catch (err) {
         err = new CustomError(getError(err.message))
@@ -75,14 +90,25 @@ router.post("/", async (req, res) => {
     }
 })
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth, async (req, res) => {
 
     const obj = req.body
     const id = req.params.id
 
     try {
-        await ProductsRepository.updateProduct(id, obj)
-        res.send({status:"success"})
+        const user =  await UsersRepository.login({
+            email:req.user.email,
+            password:req.user.password
+        })
+        const p = await ProductsRepository.getProductById(id)
+        if(user.role === "admin" || (user.role === "premium" && p.owner === user.email)) {
+            await ProductsRepository.updateProduct(id, obj)
+            res.send({ status: "success" })
+        }
+        else{
+            res.status(401).json({error:"Unforbidden"})
+        }
+    
     }
     catch (err) {
         err = new CustomError(getError(err.message))
@@ -91,7 +117,7 @@ router.put("/:id", async (req, res) => {
     }
 })
 
-router.delete("/:id",checkAuth, async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
 
 
     const id = req.params.id
@@ -102,11 +128,16 @@ router.delete("/:id",checkAuth, async (req, res) => {
             password: req.user.password
         })
 
-        if (user.role === "admin") {
+        const p = await ProductsRepository.getProductById(id)
+
+        if (user.role === "admin" || (user.role === "premium" && p.owner === user.email)) {
             await ProductsRepository.deleteProduct(id)
+            res.send({ status: "success" })
+        }
+        else{
+            res.status(401).json({error:"Unforbidden"})
         }
 
-        res.send({status:"success"})
     }
     catch (err) {
         err = new CustomError(getError(err.message))

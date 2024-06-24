@@ -1,3 +1,10 @@
 {"level":"warning","message":"Warning!!"}
 {"level":"error","message":"Some random error"}
 {"level":"fatal","message":"A fatal error, kill the server"}
+{"level":"error","message":{"code":0,"name":[null,"Cast to ObjectId failed for value \"662a97ff90390587ddd95cf77\" (type string) at path \"_id\" for model \"users\"",null]}}
+{"level":"error","message":{"code":0,"name":[null,"Cast to ObjectId failed for value \"662a97ff90390587ddd95cf77\" (type string) at path \"_id\" for model \"users\"",null]}}
+{"level":"error","message":{"code":0,"name":[null,"Assignment to constant variable.",null]}}
+{"level":"error","message":{"code":0,"name":[null,"ENOENT: no such file or directory, unlink 'C:\\Users\\hmira\\Documents\\Backend Coderhouse\\src\\dao\\emails\\santivmirantes@gmail.com'",null]}}
+{"level":"error","message":{"code":0,"name":[null,"ENOENT: no such file or directory, unlink 'C:\\Users\\hmira\\Documents\\Backend Coderhouse\\src\\dao\\emails\\santivmirantes@gmail.com'",null]}}
+{"level":"error","message":{"code":0,"name":[null,"ENOENT: no such file or directory, unlink 'C:\\Users\\hmira\\Documents\\Backend Coderhouse\\src\\dao\\emails\\santivmirantes@gmail.com'",null]}}
+{"level":"error","message":{"code":0,"name":[null,"ENOENT: no such file or directory, unlink 'C:\\Users\\hmira\\Documents\\Backend Coderhouse\\src\\dao\\emails\\santivmirantes@gmail.com'",null]}}

@@ -65,6 +65,31 @@ paths:
           application/json:
             schema:
               $ref: "#components/schemas/Error"
+  /api/sessions/premium/{?id}:
+    get:
+      summary: change user's role from user to premium or from premium to user
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of the user
+          schema:
+            $type: string
+    responses:
+      "200":
+        description: user's role changed succesfully
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Success"
+      "500":
+        description: internal server error
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Error"
 components:
   schemas:
     Success:

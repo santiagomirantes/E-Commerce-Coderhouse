@@ -17,7 +17,7 @@ form p{
     display: none;
     color: red;
 }
-form #register{
+form #register, form #forgot{
     color:black;
     display: unset;
 }

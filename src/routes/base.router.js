@@ -3,6 +3,8 @@ const { RestrictedUserDTO } = require("../dao/DTOs/RestrictedUserDTO")
 const express = require("express")
 const { checkAuth } = require("../config/passport");
 const Mocks = require("../mocks/Mocks")
+const fs = require("fs").promises
+const path = require("path")
 
 const router = express.Router()
 
@@ -37,7 +39,8 @@ router.get("/products", checkAuth, async (req, res) => {
             products: products.payload,
             cart: cartID,
             user,
-            isUser: user.role !== "admin"
+            isUser: user.role !== "admin",
+            isPremium:user.role === "premium"
         })
     }
     catch {
@@ -63,6 +66,7 @@ router.get("/products/:pid", checkAuth, async (req, res) => {
 
         const product = await ProductsRepository.getProductById(pid)
 
+
         const cartID = user.cart
         res.render("productById", {
             page: "productById",
@@ -70,7 +74,9 @@ router.get("/products/:pid", checkAuth, async (req, res) => {
             productExists: product !== null,
             cart: cartID,
             user: new RestrictedUserDTO(user),
-            isAdmin: user.role === "admin"
+            isAdmin: user.role === "admin",
+            isPremium: user.role === "premium",
+            isOwner: product.owner === user.email
         })
     }
     catch (err) {
@@ -164,11 +170,15 @@ router.get("/modifyproduct/:pid", checkAuth, async (req, res) => {
             password: req.user.password
         })
 
-        if (user.role !== "admin") {
+        if (user.role !== "admin" && user.role !== "premium") {
             return res.redirect("/products")
         }
 
         const product = await ProductsRepository.getProductById(pid)
+
+        if(user.role === "premium" && product.owner !== req.user.email) {
+            return res.redirect("/products")
+        }
 
         res.render("modifyProduct", { page: "modifyProduct", product })
 
@@ -187,11 +197,11 @@ router.get("/addproduct", checkAuth, async (req, res) => {
         })
 
 
-        if (user.role !== "admin") {
+        if (user.role !== "admin" && user.role !== "premium") {
             return res.redirect("/products")
         }
 
-        res.render("addProduct", { page: "addProduct" })
+        res.render("addProduct", { page: "addProduct"})
     }
     catch (err) {
         req.logger.fatal(err)
@@ -246,6 +256,25 @@ router.get("/loggerTest", async (req,res) => {
     req.logger.error("Some random error")
     req.logger.fatal("A fatal error, kill the server")
     res.send("success")
+})
+
+router.get("/forgotpassword", async (req,res) => {
+    res.render("forgotPassword",{page:"forgotPassword"})
+})
+
+router.get("/modifypassword/:email", async (req,res) => {
+    const email = decodeURIComponent(req.params.email)
+    try{
+      const route = path.join(__dirname,"../dao/emails/",email)
+      const content = await fs.readFile(route,"utf-8")
+      if(content !== "checked") {
+         return res.redirect("/login")
+      }
+      res.render("modifyPassword", {page:"modifyPassword", email})
+    }
+    catch(err) {
+        res.redirect("/login")
+    }
 })
 
 module.exports = router

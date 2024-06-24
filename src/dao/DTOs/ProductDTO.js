@@ -7,7 +7,8 @@ class ProductDTO{
         this.thumbnail = String(this.thumbnail)
         this.stock = isNaN(parseInt(product.stock)) ? undefined : parseInt(product.stock)
         this.status = !!this.status
-        this.category = String(product.category)
+        this.category = String(product.category),
+        this.owner = product.owner
     }
 }
 

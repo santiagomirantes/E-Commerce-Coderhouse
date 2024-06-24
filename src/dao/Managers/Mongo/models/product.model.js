@@ -12,7 +12,9 @@ const productSchema = new mongoose.Schema({
     thumbnail: String,
     stock: Number,
     status: Boolean,
-    category: String
+    category: String,
+    owner: String, //email
+    image: String
 })
 
 let productModel

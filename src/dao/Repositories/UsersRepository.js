@@ -29,6 +29,22 @@ class UsersRepository{
         obj = new this.UsersDTO(obj)
         return await this.UsersManager.login(obj)
      }
+
+     async changeRole(id) {
+      return await this.UsersManager.changeRole(id)
+     }
+
+     async forgotPassword(email) {
+      return await this.UsersManager.forgotPassword(email)
+     }
+
+     async checkCode(email,code) {
+      return await this.UsersManager.checkCode(email,code)
+     }
+
+     async modifyPassword(email,newPassword) {
+      return await this.UsersManager.modifyPassword(email,newPassword)
+     }
 }
 
 module.exports = UsersRepository

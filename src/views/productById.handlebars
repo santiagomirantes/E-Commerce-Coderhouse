@@ -5,13 +5,22 @@
 <h2>{{product.price}}</h2>
 <p>{{product.description}}</p>
 
+{{#if isPremium}}
+{{#if isOwner}}
+<h3>Owner controls</h3>
+<button id="delete" onclick="deleteProduct('{{product._id}}')">Delete product</button>
+<button id="modify" onclick="window.location.href = '/modifyproduct/{{product._id}}'">Modify product</button>
+{{/if}}
+{{/if}}
+
 {{#if isAdmin}}
 <h3>Admin controls</h3>
 <button id="delete" onclick="deleteProduct('{{product._id}}')">Delete product</button>
 <button id="modify" onclick="window.location.href = '/modifyproduct/{{product._id}}'">Modify product</button>
 {{else}}
-<button id="addToCart" onclick="addToTheCart('{{cart}}','{{product._id}}')">Add to cart</button>
+<button id="addToCart" onclick="addToTheCart('{{cart}}','{{product._id}}',{{isPremium}},'{{user.email}}','{{product.owner}}')">Add to cart</button>
 {{/if}}
+
 {{else}}
 <h1>Couldn´t find the product</h1>
 {{/if}}
